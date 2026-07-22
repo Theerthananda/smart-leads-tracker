@@ -1,56 +1,60 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Smart Leads Tracker</title>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leads Tracker</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
 
-    <link rel="stylesheet" href="style.css">
-</head>
-
-<body>
-
+  <body>
     <div class="container">
+      <header class="header">
+        <h1>📌 Smart Leads Tracker</h1>
 
-        <h2>📌 Smart Leads Trackerr</h2>
+        <p class="subtitle">Save, organize and manage your favorite links.</p>
 
+        <div id="counter-ele" class="counter">📚 Saved Links: 0</div>
+      </header>
+
+      <div class="input-section">
         <input
-            id="input-ele"
-            type="text"
-            placeholder="Paste a URL or type something..."
-        >
+          id="input-ele"
+          type="text"
+          placeholder="Paste a URL or type something..."
+        />
 
-        <div class="buttons">
+        <input id="search-ele" type="text" placeholder="🔍 Search links..." />
+      </div>
 
-            <button id="input-btn">
-                💾 SAVE INPUT
-            </button>
+      <div class="buttons">
+        <button id="input-btn">💾 Save Input</button>
 
-            <button id="tab-btn">
-                🌐 SAVE TAB
-            </button>
+        <button id="tab-btn">🌐 Save Tab</button>
 
-            <div class="tooltip">
+        <button id="sort-btn">🔤 Sort</button>
 
-                <button id="clear-btn">
-                    🗑 DELETE ALL
-                </button>
+        <button id="export-btn">📤 Export</button>
 
-                <span class="tooltip-text">
-                    Double-click to delete
-                </span>
+        <button id="import-btn">📥 Import</button>
 
-            </div>
+        <button id="theme-btn">🌙 Dark Mode</button>
 
+        <div class="tooltip">
+          <button id="clear-btn">🗑 Delete All</button>
+
+          <span class="tooltip-text">   Double-click to delete </span>
         </div>
+      </div>
 
-        <ul id="ul-ele"></ul>
+      <input type="file" id="import-file" accept=".json" hidden />
 
+      <ul id="ul-ele"></ul>
     </div>
 
+    <div id="toast"></div>
+
     <script src="script.js"></script>
-
-</body>
-
+  </body>
 </html>
