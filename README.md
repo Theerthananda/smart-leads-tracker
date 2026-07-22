@@ -1,161 +1,205 @@
 # 🚀 Smart Leads Tracker
 
-A lightweight and user-friendly Chrome extension that helps you save, organize, and quickly access your favorite website links. Save URLs manually or capture the current browser tab with a single click.
+> A modern, lightweight Chrome Extension to save, organize, and manage your favorite website links with a clean UI and powerful productivity features.
+
+![License](https://img.shields.io/badge/License-MIT-green.svg)
+![Chrome Extension](https://img.shields.io/badge/Chrome-Extension-blue)
+![JavaScript](https://img.shields.io/badge/JavaScript-ES6-yellow)
+![HTML5](https://img.shields.io/badge/HTML5-orange)
+![CSS3](https://img.shields.io/badge/CSS3-blue)
+
+---
+
+## 📖 Overview
+
+Smart Leads Tracker is a productivity-focused Chrome Extension that helps users quickly save, search, organize, and manage important website links without leaving the browser.
+
+Whether you're collecting study resources, project references, or useful websites, Smart Leads Tracker provides a fast and clutter-free experience.
 
 ---
 
 ## ✨ Features
 
-- 🌐 Save the current active browser tab
-- 📝 Save custom website URLs manually
-- 🔗 Open saved links directly in a new tab
-- 💾 Automatically save data using Local Storage
-- 🗑️ Double-click to clear all saved links
-- ⌨️ Press **Enter** to save URLs quickly
-- ⚡ Fast, lightweight, and easy to use
+- 🔗 Save website links manually
+- 🌐 Save the currently active browser tab
+- ⭐ Mark links as Favorites
+- 🔍 Real-time search
+- 📋 Copy links instantly
+- 🗑️ Delete individual links
+- 🧹 Delete all links
+- 🔤 Sort links (A → Z / Z → A)
+- 🌙 Dark & Light Theme
+- 💾 Local Storage Persistence
+- 📤 Export links to JSON
+- 📥 Import links from JSON
+- 🚫 Duplicate URL detection
+- 📊 Saved links counter
+- 🌍 Website favicons
+- 📱 Responsive & modern UI
 
 ---
 
-## 📸 Preview
+# 📸 Screenshots
 
-> Add screenshots after uploading them to the repository.
+## 🏠 Home
 
-| Extension |
-|-----------|
-| ![Smart Leads Tracker](screenshots/home.png) |
-| ![Smart Leads Tracker](screenshots/saved-links.png) |
-
+![Home](assets/screenshots/home.png)
 
 ---
 
-## 🛠️ Technologies Used
+## 📚 Saved Links
 
-- HTML5
-- CSS3
-- JavaScript (ES6)
-- Chrome Extensions API
-- Local Storage API
+![Saved Links](assets/screenshots/saved-links.png)
 
 ---
 
-## 📂 Project Structure
+## ⭐ Favorite Links
 
-```
-smart-leads-tracker/
+![Saved Links](assets/screenshots/favorites.png)
+
+---
+
+## 🛠️ Tech Stack
+
+| Technology | Purpose |
+|------------|---------|
+| HTML5 | Structure |
+| CSS3 | Styling |
+| JavaScript (ES6+) | Functionality |
+| Chrome Extension API | Browser Integration |
+| Local Storage API | Data Persistence |
+
+---
+
+# 📂 Project Structure
+
+```text
+SMART-LEADS-TRACKER/
+│
+├── assets/
+│   ├── icon.png
+│   └── screenshots/
+│       ├── home.png
+│       └── saved-links.png
 │
 ├── index.html
 ├── style.css
 ├── script.js
 ├── manifest.json
-├── icon.png
-├── screenshots/
-│   └── home.png
-└── README.md
+├── README.md
+└── LICENSE
 ```
 
 ---
 
-## 🚀 Getting Started
+# 🚀 Installation
 
-### 1. Clone the Repository
+### 1. Clone the repository
 
 ```bash
-git clone https://github.com/theerthananda/smart-leads-tracker.git
+git clone https://github.com/yourusername/smart-leads-tracker.git
 ```
 
-### 2. Load the Extension
-
-1. Open **Google Chrome**
-2. Visit:
+### 2. Open Chrome
 
 ```
-chrome://extensions/
+chrome://extensions
 ```
 
-3. Enable **Developer Mode**
-4. Click **Load unpacked**
-5. Select the project folder
-6. Start using **Smart Leads Tracker**
+Enable:
 
----
-
-## 💡 How to Use
-
-### Save a Website
-
-Enter a website URL and click **Save Input**.
-
-### Save the Current Tab
-
-Click **Save Tab** to instantly store the active browser tab.
-
-### Delete All Saved Links
-
-Double-click **Delete All** to clear all saved links.
-
----
-
-## 📋 Future Improvements
-
-- ✅ Delete individual links
-- 🔍 Search saved links
-- 🚫 Prevent duplicate URLs
-- ✔️ URL validation
-- 📊 Saved links counter
-- 🌙 Dark mode
-- 📤 Export & Import links
-- ⭐ Favorite links
-- ☁️ Cloud synchronization
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome!
-
-1. Fork this repository
-2. Create a new branch
-
-```bash
-git checkout -b feature-name
+```
+Developer Mode
 ```
 
-3. Commit your changes
+Click:
 
-```bash
-git commit -m "Add new feature"
+```
+Load Unpacked
 ```
 
-4. Push to GitHub
+Select the project folder.
 
-```bash
-git push origin feature-name
-```
-
-5. Open a Pull Request
+Done ✅
 
 ---
 
-## 📄 License
+# 💡 How to Use
 
-This project is licensed under the **MIT License**.
+### Save a Link
 
----
-
-## 👨‍💻 Author
-
-**Theerthananda Gowda**
-
-- GitHub: https://github.com/theerthananda
+Enter a URL and click **Save Input**.
 
 ---
 
-## 🌟 Show Your Support
+### Save Current Tab
 
-If you found this project useful, please consider giving it a ⭐ on GitHub.
-
-Your support helps improve the project and motivates future development.
+Click **Save Tab** to store the active webpage.
 
 ---
 
-**Happy Coding! 🚀**
+### Search
+
+Use the search bar to instantly filter saved links.
+
+---
+
+### Favorite
+
+Click the ⭐ icon to mark important links.
+
+---
+
+### Export
+
+Export all saved links as a JSON file.
+
+---
+
+### Import
+
+Import previously exported links with one click.
+
+---
+
+# 📦 Future Improvements
+
+- ✏️ Edit Saved Links
+- 🏷️ Categories / Tags
+- ☁️ Cloud Sync
+- 🔐 Chrome Storage Sync
+- 📅 Recently Added Filter
+
+---
+
+# 🤝 Contributing
+
+Contributions, issues, and feature requests are welcome.
+
+Feel free to fork the repository and submit a Pull Request.
+
+---
+
+# 📄 License
+
+This project is licensed under the MIT License.
+
+---
+
+# 👨‍💻 Author
+
+**Theerthananda**
+
+GitHub: https://github.com/theerthananda
+
+---
+
+## ⭐ Support
+
+If you found this project useful, consider giving it a **Star ⭐** on GitHub.
+
+It helps others discover the project and motivates future improvements.
+
+---
+
+Made with ❤️ using HTML, CSS, JavaScript & Chrome Extension APIs.
