@@ -3,14 +3,23 @@
   "name": "Smart Leads Tracker",
   "version": "1.0",
   "description": "A lightweight Chrome extension to save and manage website links quickly.",
+
   "icons": {
-    "16": "icon.png",
-    "48": "icon.png",
-    "128": "icon.png"
+    "16": "assets/icon.png",
+    "48": "assets/icon.png",
+    "128": "assets/icon.png"
   },
+
   "action": {
     "default_popup": "index.html",
-    "default_icon": "icon.png"
+    "default_icon": {
+      "16": "assets/icon.png",
+      "48": "assets/icon.png",
+      "128": "assets/icon.png"
+    }
   },
-  "permissions": ["tabs"]
+
+  "permissions": [
+    "tabs"
+  ]
 }

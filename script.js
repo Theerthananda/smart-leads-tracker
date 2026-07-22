@@ -18,262 +18,263 @@ let toastTimer;
 let isAscending = true;
 
 if (savedTheme === "dark") {
+  document.body.classList.add("dark");
 
-    document.body.classList.add("dark");
-
-    themeBtn.textContent = "☀️ Light Mode";
-
+  themeBtn.textContent = "☀️ Light Mode";
 }
 
 const leadsFromLocalStorage = JSON.parse(localStorage.getItem("MyLeads"));
 
 if (leadsFromLocalStorage) {
-    MyLeads = leadsFromLocalStorage;
+
+    MyLeads = leadsFromLocalStorage.map(item => {
+
+        if (typeof item === "string") {
+
+            return {
+                id: Date.now() + Math.random(),
+                url: item,
+                favorite: false,
+                createdAt: new Date().toISOString()
+            };
+
+        }
+
+        return item;
+
+    });
+sortLeads();
     render(MyLeads);
+
 }
 
 function formatUrl(url) {
+  url = url.trim();
 
-    url = url.trim();
+  if (
+    url.includes(".") &&
+    !url.startsWith("http://") &&
+    !url.startsWith("https://")
+  ) {
+    url = "https://" + url;
+  }
 
-    if (
-        url.includes(".") &&
-        !url.startsWith("http://") &&
-        !url.startsWith("https://")
-    ) {
-        url = "https://" + url;
-    }
-
-    return url;
+  return url;
 }
 
 function showToast(message) {
+  clearTimeout(toastTimer);
 
-    clearTimeout(toastTimer);
+  toast.textContent = message;
 
-    toast.textContent = message;
+  toast.classList.add("show");
 
-    toast.classList.add("show");
-
-    toastTimer = setTimeout(function () {
-
-        toast.classList.remove("show");
-
-    }, 2000);
+  toastTimer = setTimeout(function () {
+    toast.classList.remove("show");
+  }, 2000);
 }
 
 themeBtn.addEventListener("click", function () {
+  document.body.classList.toggle("dark");
 
-    document.body.classList.toggle("dark");
+  if (document.body.classList.contains("dark")) {
+    themeBtn.textContent = "☀️ Light Mode";
 
-    if (document.body.classList.contains("dark")) {
+    localStorage.setItem("theme", "dark");
+  } else {
+    themeBtn.textContent = "🌙 Dark Mode";
 
-        themeBtn.textContent = "☀️ Light Mode";
-
-        localStorage.setItem("theme", "dark");
-
-    } else {
-
-        themeBtn.textContent = "🌙 Dark Mode";
-
-        localStorage.setItem("theme", "light");
-
-    }
-
+    localStorage.setItem("theme", "light");
+  }
 });
 searchEle.addEventListener("input", function () {
+  const searchText = searchEle.value.toLowerCase();
 
-    const searchText = searchEle.value.toLowerCase();
+  const filteredLeads = MyLeads.filter(function (lead) {
+    return lead.url.toLowerCase().includes(searchText);
+  });
 
-    const filteredLeads = MyLeads.filter(function (lead) {
-
-        return lead.toLowerCase().includes(searchText);
-
-    });
-
-    render(filteredLeads);
-
+  render(filteredLeads);
 });
 
 tabBtn.addEventListener("click", function () {
+  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+    const currentTab = tabs[0].url;
 
-    chrome.tabs.query(
-        { active: true, currentWindow: true },
-        function (tabs) {
+  if (MyLeads.some((lead) => lead.url === currentTab)) {
+    showToast("⚠️ URL already exists");
+    return;
+}
 
-            const currentTab = tabs[0].url;
+    MyLeads.push({
+      id: Date.now(),
+      url: currentTab,
+      favorite: false,
+      createdAt: new Date().toISOString(),
+    });
 
-            if (MyLeads.includes(currentTab)) {
-                showToast("⚠️ URL already exists");
-                return;
-            }
+    localStorage.setItem("MyLeads", JSON.stringify(MyLeads));
+sortLeads();
+    render(MyLeads);
 
-            MyLeads.push(currentTab);
-
-            localStorage.setItem(
-                "MyLeads",
-                JSON.stringify(MyLeads)
-            );
-
-            render(MyLeads);
-
-            showToast("✅ Tab Saved");
-
-        }
-    );
-
+    showToast("✅ Tab Saved");
+  });
 });
 
 inputBtn.addEventListener("click", function () {
+  const newLead = formatUrl(inputEle.value);
 
-    const newLead = formatUrl(inputEle.value);
+  if (newLead === "") {
+    return;
+  }
 
-    if (newLead === "") {
-        return;
-    }
+  if (MyLeads.some((lead) => lead.url === newLead)) {
+    showToast("⚠️ URL already exists");
+    return;
+  }
 
-    if (MyLeads.includes(newLead)) {
-        showToast("⚠️ URL already exists");
-        return;
-    }
+  MyLeads.push({
+    id: Date.now(),
+    url: newLead,
+    favorite: false,
+    createdAt: new Date().toISOString(),
+  });
 
-    MyLeads.push(newLead);
+  inputEle.value = "";
 
-    inputEle.value = "";
+  localStorage.setItem("MyLeads", JSON.stringify(MyLeads));
+sortLeads();
+  render(MyLeads);
 
-    localStorage.setItem(
-        "MyLeads",
-        JSON.stringify(MyLeads)
-    );
-
-    render(MyLeads);
-
-    showToast("✅ Link Saved");
+  showToast("✅ Link Saved");
 });
 
 clearBtn.addEventListener("dblclick", function () {
+  localStorage.removeItem("MyLeads");
 
-    localStorage.removeItem("MyLeads");
+  MyLeads = [];
+sortLeads();
+  render(MyLeads);
 
-    MyLeads = [];
-
-    render(MyLeads);
-
-    showToast("🧹 All Links Deleted");
+  showToast("🧹 All Links Deleted");
 });
 
 inputEle.addEventListener("keypress", function (event) {
-
-    if (event.key === "Enter") {
-        inputBtn.click();
-    }
-
+  if (event.key === "Enter") {
+    inputBtn.click();
+  }
 });
 
 exportBtn.addEventListener("click", function () {
+  const data = JSON.stringify(MyLeads, null, 2);
 
-    const data = JSON.stringify(MyLeads, null, 2);
+  const blob = new Blob([data], {
+    type: "application/json",
+  });
 
-    const blob = new Blob([data], {
-        type: "application/json"
-    });
+  const url = URL.createObjectURL(blob);
 
-    const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
 
-    const a = document.createElement("a");
+  a.href = url;
+  a.download = "my-links.json";
 
-    a.href = url;
-    a.download = "my-links.json";
+  a.click();
 
-    a.click();
+  URL.revokeObjectURL(url);
 
-    URL.revokeObjectURL(url);
-
-    showToast("📤 Links Exported");
-
+  showToast("📤 Links Exported");
 });
 
 importBtn.addEventListener("click", function () {
-
-    importFile.click();
-
+  importFile.click();
 });
 
 importFile.addEventListener("change", function () {
+  const file = importFile.files[0];
 
-    const file = importFile.files[0];
+  if (!file) {
+    return;
+  }
 
-    if (!file) {
-        return;
-    }
+  const reader = new FileReader();
 
-    const reader = new FileReader();
-
-    reader.onload = function () {
-
+  reader.onload = function () {
     try {
+ 
+      const importedLeads = JSON.parse(reader.result);
 
-        console.log("Reader Result:");
-        console.log(reader.result);
-
-        const importedLeads = JSON.parse(reader.result);
-
-        console.log("Imported Leads:");
-        console.log(importedLeads);
-
-        MyLeads = [...new Set([...MyLeads, ...importedLeads])];
-
-        console.log("MyLeads:");
-        console.log(MyLeads);
-
-        localStorage.setItem(
-            "MyLeads",
-            JSON.stringify(MyLeads)
-        );
-
-        render(MyLeads);
-
-        showToast("📥 Links Imported");
-
-    } catch (error) {
-
-        console.error(error);
-
-        showToast("❌ Invalid JSON File");
-
-    }
-
-};
-
-    reader.readAsText(file);
-
+      const normalizedLeads = importedLeads.map(item => {
+  if (typeof item === "string") {
+    return {
+      id: Date.now() + Math.random(),
+      url: item,
+      favorite: false,
+      createdAt: new Date().toISOString()
+    };
+  }
+  return item;
 });
 
+MyLeads = [...MyLeads, ...normalizedLeads];
 
-function render(leads) {
+MyLeads = MyLeads.filter(
+    (lead, index, self) =>
+        index === self.findIndex(item => item.url === lead.url)
+);
 
-    let listItems = "";
+      localStorage.setItem("MyLeads", JSON.stringify(MyLeads));
+sortLeads();
+      render(MyLeads);
 
-    for (let i = 0; i < leads.length; i++) {
+      showToast("📥 Links Imported");
+    } catch (error) {
+      console.error(error);
 
-        const url = leads[i];
+      showToast("❌ Invalid JSON File");
+    }
+  };
 
-let domain = "";
-let favicon = "";
+  reader.readAsText(file);
+});
 
-try {
+function sortLeads() {
+  MyLeads.sort((a, b) => {
+    if (a.favorite === b.favorite) {
+      return a.url.localeCompare(b.url);
+    }
 
-    domain = new URL(url).hostname;
-
-    favicon = `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
-
-} catch {
-
-    domain = "Unknown Website";
-    favicon = "";
+    return b.favorite - a.favorite;
+  });
 }
 
-      listItems += `
+function render(leads) {
+  let listItems = "";
+
+  for (let i = 0; i < leads.length; i++) {
+    const lead = leads[i];
+    const url = lead.url;
+
+   let domain = "";
+let favicon = "";
+let displayName = "";
+    try {
+      domain = new URL(url).hostname;
+
+  const siteName = domain
+  .replace("www.", "")
+  .split(".")[0];
+
+displayName =
+  siteName.charAt(0).toUpperCase() + siteName.slice(1);
+
+      favicon = `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
+    } catch {
+    domain = "Unknown Website";
+    displayName = "Unknown";
+    favicon = "";
+}
+    listItems += `
 <li class="lead-card">
 
 <div class="lead-content">
@@ -289,7 +290,7 @@ try {
     <div class="lead-info">
 
         <div class="site-name">
-            ${domain.replace("www.", "")}
+            ${displayName}
         </div>
 
         <a
@@ -303,83 +304,115 @@ try {
 
 </div>
 
-    <div class="lead-actions">
+ <div class="lead-actions">
 
-   <button class="copy-btn" data-url="${url}">
+<button
+    class="favorite-btn"
+    data-id="${lead.id}"
+>
+    ${lead.favorite ? "★" : "☆"}
+</button>
+
+<button
+    class="copy-btn"
+    data-url="${url}"
+>
     Copy
 </button>
 
-<button class="delete-btn" data-index="${i}">
+<button
+    class="delete-btn"
+    data-id="${lead.id}"
+>
     Delete
 </button>
 
-    </div>
+</div>
 
 </li>
 `;
-    }
+  }
 
-    ulEle.innerHTML = listItems;
+  ulEle.innerHTML = listItems;
 
-    counterEle.textContent = `📚 Saved Links: ${MyLeads.length}`;
+  counterEle.textContent = `📚 Saved Links: ${MyLeads.length}`;
 }
 
 ulEle.addEventListener("click", function (event) {
+    // Favorite
+if (event.target.classList.contains("favorite-btn")) {
 
-    // Copy Link
-    if (event.target.classList.contains("copy-btn")) {
+    const id = Number(event.target.dataset.id);
 
-        const url = event.target.dataset.url;
+    const lead = MyLeads.find(lead => lead.id === id);
 
-        navigator.clipboard.writeText(url);
+    if (lead) {
+        lead.favorite = !lead.favorite;
 
-        showToast("📋 Link Copied");
+        localStorage.setItem("MyLeads", JSON.stringify(MyLeads));
 
-        return;
-    }
-
-    // Delete Link
-    if (event.target.classList.contains("delete-btn")) {
-
-        const index = Number(event.target.dataset.index);
-
-        MyLeads.splice(index, 1);
-
-        localStorage.setItem(
-            "MyLeads",
-            JSON.stringify(MyLeads)
-        );
-
+        sortLeads();
         render(MyLeads);
 
-        showToast("🗑️ Link Deleted");
+        showToast(
+            lead.favorite
+                ? "⭐ Added to Favorites"
+                : "☆ Removed from Favorites"
+        );
     }
 
+    return;
+}
+  // Copy Link
+  if (event.target.classList.contains("copy-btn")) {
+    const url = event.target.dataset.url;
+
+    navigator.clipboard.writeText(url);
+
+    showToast("📋 Link Copied");
+
+    return;
+  }
+
+  // Delete Link
+  if (event.target.classList.contains("delete-btn")) {
+   const id = Number(event.target.dataset.id);
+
+MyLeads = MyLeads.filter(lead => lead.id !== id);
+
+    localStorage.setItem("MyLeads", JSON.stringify(MyLeads));
+sortLeads();
+    render(MyLeads);
+
+    showToast("🗑️ Link Deleted");
+  }
 });
 
 sortBtn.addEventListener("click", function () {
+  if (isAscending) {
+    MyLeads.sort((a, b) => {
+  if (a.favorite !== b.favorite) {
+    return b.favorite - a.favorite;
+  }
 
-    if (isAscending) {
+  return a.url.localeCompare(b.url);
+});
+    showToast("🔤 Sorted A → Z");
+  } else {
+   MyLeads.sort((a, b) => {
+  if (a.favorite !== b.favorite) {
+    return b.favorite - a.favorite;
+  }
 
-        MyLeads.sort();
+  return b.url.localeCompare(a.url);
+});
 
-        showToast("🔤 Sorted A → Z");
+    showToast("🔠 Sorted Z → A");
+  }
 
-    } else {
+  isAscending = !isAscending;
 
-        MyLeads.sort().reverse();
-
-        showToast("🔠 Sorted Z → A");
-
-    }
-
-    isAscending = !isAscending;
-
-    localStorage.setItem(
-        "MyLeads",
-        JSON.stringify(MyLeads)
-    );
-
-    render(MyLeads);
-
+  localStorage.setItem("MyLeads", JSON.stringify(MyLeads));
+sortLeads();
+  render(MyLeads);
 });
